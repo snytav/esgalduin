@@ -182,7 +182,7 @@ def burgers_time_viscous_test ( ):
   print ( '  Solve the time-dependent 1d viscous Burgers equation.' )
 
   e_num = 32
-  nu = 1.0
+  nu = 0.0
   burgers_time_viscous ( e_num, nu )
 #
 #  Terminate.
