@@ -81,7 +81,7 @@ def burgers_time_viscous ( e_num, nu ):
   v = TestFunction ( V )
 # setting convection velocity
   c = Function ( V )
-  c.vector()[:] = np.ones(c.vector().get_local().shape)
+  c.vector()[:] = 1e-1*np.ones(c.vector().get_local().shape)
 
 #  Set U and U0 by interpolation.
 #
