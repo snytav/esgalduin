@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 #
+import numpy as np
 from dolfin import *
 
 def burgers_time_viscous ( e_num, nu ):
@@ -11,9 +12,9 @@ def burgers_time_viscous ( e_num, nu ):
 #  Discussion:
 #
 #    dudt - nu u" + u del u = 0,
-#    -1 < x < 1, 0 < t
-#    u(-1,t) = -1, u(1,t) = 1
-#    u(x,0) = x
+#    0 < x < 1, 0 < t
+#    u(0,t) = 0, u(1,t) = 0
+#    u(x,0) = sin(pi*x)
 #
 #    This equation is nonlinear in U.
 #
@@ -78,7 +79,10 @@ def burgers_time_viscous ( e_num, nu ):
   u = Function ( V )
   u_old = Function ( V )
   v = TestFunction ( V )
-#
+# setting convection velocity
+  c = Function ( V )
+  c.vector()[:] = np.ones(c.vector().get_local().shape)
+
 #  Set U and U0 by interpolation.
 #
   u.interpolate ( u_init )
@@ -105,7 +109,7 @@ def burgers_time_viscous ( e_num, nu ):
   ( \
     dot ( u - u_old, v ) / DT \
   + nu * inner ( grad ( u ), grad ( v ) ) \
-  + inner ( u * u.dx(0), v ) \
+  + inner ( c * u.dx(0), v ) \
   - dot ( f, v ) \
   ) * dx
 #
