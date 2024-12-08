@@ -81,7 +81,9 @@ def burgers_time_viscous ( e_num, nu ):
   v = TestFunction ( V )
 # setting convection velocity
   c = Function ( V )
+  k = Function ( V )
   c.vector()[:] = 1e-1*np.ones(c.vector().get_local().shape)
+  k.vector()[:] = 1e0*np.ones(k.vector().get_local().shape)
 
 #  Set U and U0 by interpolation.
 #
@@ -108,7 +110,7 @@ def burgers_time_viscous ( e_num, nu ):
   F = \
   ( \
     dot ( u - u_old, v ) / DT \
-  + nu * inner ( grad ( u ), grad ( v ) ) \
+  + dot(k , inner ( grad ( u ), grad ( v ) )) \
   + inner ( c * u.dx(0), v ) \
   - dot ( f, v ) \
   ) * dx
@@ -130,7 +132,7 @@ def burgers_time_viscous ( e_num, nu ):
     if ( k % 10 == 0 ):
       plot ( u, title = ( 'burgers time viscous %g' % ( t ) ) )
       plt.grid ( True )
-      filename = ( 'burgers_time_viscous_%d.png' % ( k ) )
+      filename = ( 'convection-diffusion_variableNU_%d.png' % ( k ) )
       plt.savefig ( filename )
       print ( 'Graphics saved as "%s"' % ( filename ) )
       plt.close ( )
